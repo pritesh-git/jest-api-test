@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# Test coverage
+coverage/
+
+# Local environment variables
+.env

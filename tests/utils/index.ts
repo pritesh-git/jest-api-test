@@ -1,32 +1,50 @@
-import { userData } from "../enums/index";
+import { Chance } from "chance";
+import { UserData } from "../../src/types/enums";
+import {
+  CreateUserPayload,
+  LoginPayload,
+  RegisterPayload,
+  updateInfo as UpdateInfoInterface,
+} from "../../src/types/models";
 
-const Chance = require("chance");
-const chance = new Chance();
+export const chance = new Chance();
 
-export const loginInfo = () => {
+/**
+ * Valid test credentials for login
+ */
+export const loginInfo = (): LoginPayload => {
   return {
-    email: userData.EMAIL,
-    password: userData.PASSWORD,
+    email: UserData.EMAIL,
+    password: UserData.PASSWORD,
   };
 };
 
-export const registerInfo = () => {
+/**
+ * Random user credentials for registration tests
+ */
+export const registerInfo = (): RegisterPayload => {
   return {
-    email: chance.email({ domain: "@reqres.in" }),
+    email: chance.email({ domain: "reqres.in" }),
     password: chance.word(),
   };
 };
 
-export const createInfo = () => {
+/**
+ * Random user data for user creation
+ */
+export const createInfo = (): CreateUserPayload => {
   return {
     name: chance.name(),
     job: chance.string({ length: 5, casing: "upper", alpha: true }),
   };
 };
 
-export const updateInfo = () => {
+/**
+ * Random user data for user updates
+ */
+export const updateInfo = (): UpdateInfoInterface => {
   return {
-    id: userData.ID,
+    id: UserData.ID,
     data: {
       name: chance.name(),
       job: chance.string({ length: 5, casing: "upper", alpha: true }),
@@ -34,13 +52,27 @@ export const updateInfo = () => {
   };
 };
 
-export const deleteUserId = () => {
+/**
+ * Random user ID for delete tests
+ */
+export const deleteUserId = (): { id: number } => {
   return {
     id: chance.integer({ min: 1, max: 10 }),
   };
 };
-export const getUserId = () => {
+
+/**
+ * Random user ID for get user tests
+ */
+export const getUserId = (): { id: number } => {
   return {
     id: chance.integer({ min: 1, max: 10 }),
   };
 };
+
+// Aliases for modern test naming conventions
+export const createUserData = createInfo;
+export const updateUserData = updateInfo;
+export const validLoginCredentials = loginInfo;
+export const randomRegisterCredentials = registerInfo;
+export const getRandomUserId = (): number => chance.integer({ min: 1, max: 10 });

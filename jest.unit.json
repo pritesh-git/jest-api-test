@@ -1,7 +1,13 @@
 {
   "preset": "ts-jest",
+  "testEnvironment": "node",
   "coverageDirectory": "./coverage",
-  "testMatch": ["**/?(*.)+(test).ts"],
+  "testMatch": ["**/?(*.)+(spec|test).ts"],
+  "moduleNameMapper": {
+    "^@src/(.*)$": "<rootDir>/src/$1",
+    "^@tests/(.*)$": "<rootDir>/tests/$1"
+  },
   "resetMocks": true,
-  "clearMocks": true
+  "clearMocks": true,
+  "testTimeout": 20000
 }

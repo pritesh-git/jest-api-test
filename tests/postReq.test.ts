@@ -1,28 +1,35 @@
 import registerUser from "./apis/registerUser";
+import * as utils from "./utils";
+import { StatusCode } from "../src/types/enums";
+import { CreateUserPayload } from "../src/types/models";
 
-const utils = require("./utils/index.ts");
+describe("POST Create User API Tests", () => {
+  let createData: CreateUserPayload;
+  const registerUserInstance = new registerUser();
 
-describe("Test For POST User", () => {
-  let createData: any;
   beforeEach(() => {
     createData = utils.createInfo();
   });
-  const registerUserInstance = new registerUser();
-  it("Should return status 200", async () => {
+
+  it("should return HTTP 201 Created when creating a user", async () => {
     const result = await registerUserInstance.createUser(createData);
-    expect(result.status).toEqual(201); //Check if res status is 200
-    expect(result.status).not.toBe(400); //Check if res status is not 400
-    expect(result.status).not.toBeCloseTo(400);
+    expect(result.status).toBe(StatusCode.CREATED);
+    expect(result.status).not.toBe(StatusCode.BAD_REQUEST);
   });
 
-  it("StatusText should be Created", async () => {
+  it("should return statusText 'Created'", async () => {
     const result = await registerUserInstance.createUser(createData);
-    expect(result.statusText).toEqual("Created");
-    expect(result.statusText).not.toEqual("");
+    expect(result.statusText).toBe("Created");
+    expect(result.statusText).not.toBe("");
   });
 
-  it("Should return a object as response", async () => {
+  it("should return a created user object with id and createdAt timestamp", async () => {
     const result = await registerUserInstance.createUser(createData);
-    expect(result.data).toBeInstanceOf(Object); //Check if data is objects
+    expect(result.data).toBeInstanceOf(Object);
+    expect(result.data).toHaveProperty("id");
+    expect(result.data).toHaveProperty("name", createData.name);
+    expect(result.data).toHaveProperty("job", createData.job);
+    expect(result.data).toHaveProperty("createdAt");
+    expect(Number.isNaN(Date.parse(result.data.createdAt))).toBe(false);
   });
 });
